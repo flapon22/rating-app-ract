@@ -1,0 +1,29 @@
+{
+  "feedback": [
+    {
+      "text": "ella no pide na se arregla sola",
+      "rating": 2,
+      "id": 1
+    },
+    {
+      "text": "hola mundo ya paso de moda",
+      "rating": 4,
+      "id": 4
+    },
+    {
+      "text": "que pex con esto",
+      "rating": 8,
+      "id": 5
+    },
+    {
+      "text": "estamos probando el back mock",
+      "rating": 5,
+      "id": 6
+    },
+    {
+      "text": "aja q pex broder amigo",
+      "rating": 1,
+      "id": 7
+    }
+  ]
+}

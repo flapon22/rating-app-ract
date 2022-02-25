@@ -1,15 +1,18 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useContext} from 'react'
 
-function RatingSelect({select}) {
+function RatingSelect({select, autoRating}) {
     const [selected, setSelected] = useState(10)
 
     const handleChange = (e) => {
         setSelected(+e.currentTarget.value)
+        select(+e.currentTarget.value)
     }
 
     useEffect(() => {
-        select(selected)
-    }, [selected]);
+        if(autoRating) {
+            setSelected(autoRating)
+        }
+    }, [autoRating]);
 
   return (
     <ul className='rating'>

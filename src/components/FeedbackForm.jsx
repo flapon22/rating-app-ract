@@ -1,23 +1,25 @@
 import Card from "./shared/Card"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import Button from "./shared/Button"
 import RatingSelect from "./RatingSelect"
+import FeedbackContext from "../context/FeedbackContext"
 
-function FeedbackForm({handleAdd}) {
+function FeedbackForm() {
     const [text, setText] = useState('')
     const [rating, setRating] = useState('')
     const [btnDisabled, setBtnDisabled] = useState(true)
     const [message, setMessage] = useState('')
 
+    const {addFeedback, feedbackEdit, updateFeedback, editFeedback }= useContext(FeedbackContext)
+
     const handleTextChange = (e) => {
-        setText(e.target.value)
+        let val = e.target.value
+        setText(val)
+        validate(val)
     }
 
-    const validate = () => {
-        if(text === '') {
-            setBtnDisabled(true)
-            setMessage(null)
-        } else if(text !== '' && text.length <= 10) {
+    const validate = (val) => {
+        if(!!val && val.length <=10){
             setBtnDisabled(true)
             setMessage('Text must be at least 10 characters')
         } else {
@@ -34,22 +36,39 @@ function FeedbackForm({handleAdd}) {
                 rating
             }
 
-            handleAdd(newFeedback)
+            if(feedbackEdit.edit === true) {
+
+                updateFeedback(feedbackEdit.item.id, newFeedback)
+                editFeedback({}, false)
+
+            } else {
+
+                addFeedback(newFeedback)
+            }
+
             setText('')
         }
     }
 
     useEffect(() => {
-        validate(); // This is be executed when the state changes
-    }, [text]);
+        if(feedbackEdit.edit === true){
+            validate(feedbackEdit.item.text)
+            setText(feedbackEdit.item.text)
+            setRating(feedbackEdit.item.rating)
+        }
+    }, [feedbackEdit]);
+
+    // useEffect(() => {
+
+    // }, [feedbackEdit]);
 
   return (
     <Card>
         <form onSubmit={handleSubmit}>
             <h2>How would you rate your service whit us?</h2>
-            <RatingSelect select={(rating) => setRating(rating)}/>
+            <RatingSelect autoRating={rating} select={(rating) => setRating(rating)}/>
             <div className="input-group">
-                <input value={text} onChange={handleTextChange} type="text" placeholder="Write a review"/>
+                <input value={text} onInput={handleTextChange} type="text" placeholder="Write a review"/>
                 <Button type="submit" isDisabled={btnDisabled}>
                     Send
                 </Button>
